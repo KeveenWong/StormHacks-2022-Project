@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.jsx",
   "scripts": {
-    "start": "node index.jsx"
+    "start": "node index.jsx",
+    "server": "nodemon index.jsx --ignore client"
   },
   "keywords": [],
   "author": "",
