@@ -1,4 +1,11 @@
-const { Client, PrivateKey, AccountCreateTransaction, AccountBalanceQuery, Hbar, TransferTransaction} = require("@hashgraph/sdk");
+const { 
+    Client, 
+    PrivateKey, 
+    AccountCreateTransaction, 
+    AccountBalanceQuery, 
+    Hbar, 
+    TransferTransaction
+} = require("@hashgraph/sdk");
 require("dotenv").config();
 
 // console.log("running reward.js...");
