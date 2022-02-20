@@ -204,11 +204,11 @@ async function rewardNFT() {
 
   //IPFS content identifiers for which we will create a NFT
   // it's a cherry, precede this with https://ipfs.io/ipfs/ to see the image for yourself
-  CID = ["QmU36R6QsPrQvKDpdij8C7dxisSMmesqdmDmjo3wa2ZCUV"];
+  var CID = "QmU36R6QsPrQvKDpdij8C7dxisSMmesqdmDmjo3wa2ZCUV";
   // this is a bunch of grapes
-  //CID = ["QmW45vACEx71Vssxaags9Ter1UNXLwpBmKSCfyQykwZMk1"];
+  //CID = "QmW45vACEx71Vssxaags9Ter1UNXLwpBmKSCfyQykwZMk1";
   // this one is a mandarin
-  //CID = ["QmSy9J8GR8XpDgG3vjaZNKqnHGHDvUzwcX2icuaXfmKLzo"];
+  //CID = "QmSy9J8GR8XpDgG3vjaZNKqnHGHDvUzwcX2icuaXfmKLzo";
 
   // Mint new NFT (type is based on CID above)
   let mintTx = await new TokenMintTransaction()
@@ -244,7 +244,6 @@ async function rewardNFT() {
   //Confirm the transaction was successful
   console.log(`- NFT association with Alice's account: ${associateAliceRx.status}\n`);
 
-
   // Check the balance before the transfer for the treasury account
   var balanceCheckTx = await new AccountBalanceQuery().setAccountId(treasuryId).execute(client);
   console.log(`- Treasury balance: ${balanceCheckTx.tokens._map.get(tokenId.toString())} NFTs of ID ${tokenId}`);
@@ -273,6 +272,7 @@ async function rewardNFT() {
   var balanceCheckTx = await new AccountBalanceQuery().setAccountId(aliceId).execute(client);
   console.log(`- Alice's balance: ${balanceCheckTx.tokens._map.get(tokenId.toString())} NFTs of ID ${tokenId}`);
   
+  alert("Good job! You've kept up a weekly reading streak, so we've rewarded you with your very own NFT! Take a look at https://ipfs.io/ipfs/" + CID);
 }
 
 function createArticle(prop) {
@@ -289,9 +289,11 @@ function App() {
   function inc() {
     setCount(count + 1);
     reward();
-    if (count == 7) {
+    if (count % 7 == 0) {
+      console.log("mod condition met");
       rewardNFT();
     }
+    console.log(count);
   }
 
   useEffect(() => {
