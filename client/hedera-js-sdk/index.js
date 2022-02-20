@@ -7,15 +7,13 @@ async function main() {
     const myAccountId = process.env.MY_ACCOUNT_ID;
     const myPrivateKey = process.env.MY_PRIVATE_KEY;
 
-    console.log("hello world");
-
     // If we weren't able to grab it, we should throw a new error
     if (myAccountId == null ||
         myPrivateKey == null ) {
         throw new Error("Environment variables myAccountId and myPrivateKey must be present");
     }
 
-    
+    console.log("Account ID and Private Key retrieved.");
     
     // Create our connection to the Hedera network
     // The Hedera JS SDK makes this really easy!

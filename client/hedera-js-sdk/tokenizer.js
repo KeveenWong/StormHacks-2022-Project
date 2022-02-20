@@ -17,19 +17,24 @@ const {
 const operatorId = AccountId.fromString(process.env.OPERATOR_ID);
 // const operatorKey = PrivateKey.fromString(process.env.OPERATOR_PVKEY);
 const operatorKey = PrivateKey.generateED25519();
+console.log("Generated operatorKey as " + operatorKey);
 const treasuryId = AccountId.fromString(process.env.TREASURY_ID);
 // const treasuryKey = PrivateKey.fromString(process.env.TREASURY_PVKEY);
 const treasuryKey = PrivateKey.generateED25519();
+console.log("Generated treasuryKey as " + treasuryKey);
 const aliceId = AccountId.fromString(process.env.ALICE_ID);
 // const aliceKey = PrivateKey.fromString(process.env.ALICE_PVKEY);
 const aliceKey = PrivateKey.generateED25519();
+console.log("Generated aliceKey as " + aliceKey);
 
 const client = Client.forTestnet().setOperator(operatorId, operatorKey);
 
 const supplyKey = PrivateKey.generate();
+console.log("Generated supplyKey as " + supplyKey);
 
 async function main() {
 	//Create the NFT
+    console.log("Attempting to create NFT...");
 	let nftCreate = await new TokenCreateTransaction()
 		.setTokenName("diploma")
 		.setTokenSymbol("GRAD")
@@ -43,12 +48,15 @@ async function main() {
 		.freezeWith(client);
 
 	//Sign the transaction with the treasury key
+    console.log("Attempting to sign transaction with treasury key...");
 	let nftCreateTxSign = await nftCreate.sign(treasuryKey);
 
 	//Submit the transaction to a Hedera network
+    console.log("Attempting to submit transaction to Hedera network...");
 	let nftCreateSubmit = await nftCreateTxSign.execute(client);
 
 	//Get the transaction receipt
+    console.log("Attempting to get transaction receipt...");
 	let nftCreateRx = await nftCreateSubmit.getReceipt(client);
 
 	//Get the token ID
