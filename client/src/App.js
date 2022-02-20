@@ -96,7 +96,7 @@ async function reward() {
 
   console.log("The existing account's new balance after the transfer is: " +getNewBalance.hbars.toTinybars() +" tinybar.")
 
-  Alert("The transfer transaction from op account to the existing account was: " + transactionReceipt.status.toString() +  "\n" + "The existing account's new balance after the transfer is: " +getNewBalance.hbars.toTinybars() +" tinybar." );
+  alert("The transfer transaction from op account to the existing account was: " + transactionReceipt.status.toString() +  "\n" + "The existing account's new balance after the transfer is: " +getNewBalance.hbars.toTinybars() +" tinybar." );
 }
 
 function createArticle(prop) {
