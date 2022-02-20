@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.jsx",
     "server": "nodemon index.jsx --ignore client",
-    "build": "cd client && npm install && npm run build"
+    "build": "cd ../client && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
