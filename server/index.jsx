@@ -1,5 +1,7 @@
 // server/index.js
 const fs = require('fs');
+const path = require('path');
+const express = require('express');
 
 let rawdata = fs.readFileSync('file.json');
 let countdata = JSON.parse(rawdata);
@@ -30,11 +32,13 @@ const article =  [
 let newfile = {
   "num" : countdata.num+1
 }
-const express = require("express");
 
 const PORT = process.env.PORT || 3001;
 
 const app = express();
+
+// Have Node serve the files for our built React app
+app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 app.get("/api", (req, res) => {
   res.json(article);
@@ -49,8 +53,12 @@ app.post('/create', function(req, res) {
 });
 
 app.get("/streak", (req, res) => {
-  
   res.send(countdata.num.toString());
+});
+
+// All other GET requests not handled before will return our React app
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
 app.listen(PORT, () => {

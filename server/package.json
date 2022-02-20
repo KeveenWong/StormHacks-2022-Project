@@ -5,12 +5,16 @@
   "main": "index.jsx",
   "scripts": {
     "start": "node index.jsx",
-    "server": "nodemon index.jsx --ignore client"
+    "server": "nodemon index.jsx --ignore client",
+    "build": "cd client && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.3"
+  },
+  "engines": {
+    "node": "16.14.0"
   }
 }
