@@ -4,6 +4,7 @@ const {
 	AccountId,
 	PrivateKey,
 	Client,
+	AccountCreateTransaction,
 	TokenCreateTransaction,
 	TokenType,
 	TokenSupplyType,
@@ -11,33 +12,73 @@ const {
 	TransferTransaction,
 	AccountBalanceQuery,
 	TokenAssociateTransaction,
+	Hbar,
 } = require("@hashgraph/sdk");
 
-// Configure accounts and client, and generate needed keys
-const operatorId = AccountId.fromString(process.env.OPERATOR_ID);
-// const operatorKey = PrivateKey.fromString(process.env.OPERATOR_PVKEY);
-const operatorKey = PrivateKey.generateED25519();
+/*********************************************************************************************/
+/*
+	Configuring account IDs, needed keys, and the client.
+*/
+/*********************************************************************************************/
+const operatorId = AccountId.fromString(process.env.MY_ACCOUNT_ID);
+const operatorKey = PrivateKey.fromString(process.env.MY_PRIVATE_KEY);
 console.log("Generated operatorKey as " + operatorKey);
-const treasuryId = AccountId.fromString(process.env.TREASURY_ID);
-// const treasuryKey = PrivateKey.fromString(process.env.TREASURY_PVKEY);
-const treasuryKey = PrivateKey.generateED25519();
+
+const treasuryId = operatorId;
+const treasuryKey = operatorKey;
 console.log("Generated treasuryKey as " + treasuryKey);
-const aliceId = AccountId.fromString(process.env.ALICE_ID);
-// const aliceKey = PrivateKey.fromString(process.env.ALICE_PVKEY);
+
+// aliceId will be created in main() thru legit account creation
+// makes use of AccountCreateTransaction
 const aliceKey = PrivateKey.generateED25519();
 console.log("Generated aliceKey as " + aliceKey);
-
-const client = Client.forTestnet().setOperator(operatorId, operatorKey);
 
 const supplyKey = PrivateKey.generate();
 console.log("Generated supplyKey as " + supplyKey);
 
+const client = Client.forTestnet().setOperator(operatorId, operatorKey);
+
 async function main() {
+	
+	/*********************************************************************************************/
+	/*
+		So here is where we make a fake account to receive a brand new NFT.
+		In practice, you would want to get user credentials and verify the account,
+		then verify whether the reader has completed their weekly reading streak,
+		THEN you would make an NFT and transfer to their account.
+		In this demo, Alice has completed her reading streak and is rewarded a Cherry Fruit NFT. 
+	*/
+	/*********************************************************************************************/
+	// Create a new account with 0 starting balance
+	const newAccountTransactionResponse = await new AccountCreateTransaction()
+		.setKey(aliceKey)
+		.setInitialBalance(0)
+		.execute(client);
+
+	// Get the new account ID
+	const getReceipt = await newAccountTransactionResponse.getReceipt(client);
+	const aliceId = getReceipt.accountId;
+
+	console.log("The aliceId is: " +aliceId);
+
+	//Verify the account balance
+	const accountBalance = await new AccountBalanceQuery()
+		.setAccountId(aliceId)
+		.execute(client);
+
+	console.log("The aliceId account balance is: " +accountBalance.hbars.toTinybars() +" tinybar.");
+	
+	/*********************************************************************************************/
+	/*
+		END OF FAKE ALICE ACCOUNT CREATION
+	*/
+	/*********************************************************************************************/
+	
 	//Create the NFT
     console.log("Attempting to create NFT...");
 	let nftCreate = await new TokenCreateTransaction()
-		.setTokenName("diploma")
-		.setTokenSymbol("GRAD")
+		.setTokenName("Cherry Fruit")
+		.setTokenSymbol("CHERRY")
 		.setTokenType(TokenType.NonFungibleUnique)
 		.setDecimals(0)
 		.setInitialSupply(0)
@@ -66,9 +107,14 @@ async function main() {
 	console.log(`- Created NFT with Token ID: ${tokenId} \n`);
 
 	//IPFS content identifiers for which we will create a NFT
-	CID = ["QmTzWcVfk88JRqjTpVwHzBeULRTNzHY7mnBSG42CpwHmPa"];
+	// it's a cherry, precede this with https://ipfs.io/ipfs/ to see the image for yourself
+	CID = ["QmU36R6QsPrQvKDpdij8C7dxisSMmesqdmDmjo3wa2ZCUV"];
+	// this is a bunch of grapes
+	//CID = ["QmW45vACEx71Vssxaags9Ter1UNXLwpBmKSCfyQykwZMk1"];
+	// this one is a mandarin
+	//CID = ["QmSy9J8GR8XpDgG3vjaZNKqnHGHDvUzwcX2icuaXfmKLzo"];
 
-	// Mint new NFT
+	// Mint new NFT (type is based on CID above)
 	let mintTx = await new TokenMintTransaction()
 		.setTokenId(tokenId)
 		.setMetadata([Buffer.from(CID)])
