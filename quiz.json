@@ -1,0 +1,16 @@
+{
+    "quiz": [
+        {
+            "question": "A tokamak turns hydrogen fuel into plasma using ___ and ___.",
+            "answer": "Heat and pressure."
+        },
+        {
+            "question": "What isotopes may still be in Fukushima wastewater?",
+            "answer": "Carbon-14, cobalt-60, and strontium-90."
+        },
+        {
+            "question": "When does AT&T plan to shutdown its 3G netowrk?",
+            "answer": "February 22, 2022."
+        }
+    ]
+}
