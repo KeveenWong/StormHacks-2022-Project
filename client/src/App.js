@@ -256,7 +256,7 @@ async function createNFT() {
 	// Check the balance of Alice's account after the transfer
 	var balanceCheckTx = await new AccountBalanceQuery().setAccountId(aliceId).execute(client);
 	console.log(`- Alice's balance: ${balanceCheckTx.tokens._map.get(tokenId.toString())} NFTs of ID ${tokenId}`);
-  alert("Your gift NFT creation and transfer is complete!");
+  alert("Your gift NFT creation and transfer is complete! Take a look at https://ipfs.io/ipfs/" +CID[0]);
 }
 function createArticle(prop) {
   return <Articles 
@@ -271,7 +271,7 @@ function App() {
   const [count, setCount] = useState(0);
   function inc() {
     setCount(count + 1);
-    if(count%10 === 0) {
+    if(count%7 === 0) {
     createNFT();
     } else {
       reward();
